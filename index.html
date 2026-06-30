@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMA ALBANNA - Portal Manajemen Sekolah</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-green': '#18382A',
+                        'brand-gold': '#BA9F6B',
+                        'brand-cream': '#F8F7F2',
+                        'brand-light-gold': '#E6DFCC',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        'pattern': "url(\"data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23C1BCA4' stroke-width='0.5' opacity='0.3' fill='none'%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cline x1='22' y1='22' x2='58' y2='58'/%3E%3Cline x1='58' y1='22' x2='22' y2='58'/%3E%3C/g%3E%3C/svg%3E\")"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        .glass-overlay {
+            background: linear-gradient(to top, rgba(24, 56, 42, 0.9) 0%, rgba(24, 56, 42, 0) 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+        
+        /* Directory List Styling */
+        .directory-list ol {
+            list-style-position: outside;
+            margin-left: 1.25rem;
+        }
+        .directory-list li::marker {
+            color: #BA9F6B;
+            font-weight: 600;
+        }
+        
+        /* Document Link Button Styling */
+        .doc-link {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            color: inherit;
+            transition: color 0.2s ease;
+            text-decoration: none;
+            line-height: 1.4;
+        }
+        .doc-link:hover {
+            color: #BA9F6B;
+        }
+        .doc-link span {
+            border-bottom: 1px dashed transparent;
+            transition: border-color 0.2s ease;
+        }
+        .doc-link:hover span {
+            border-color: #BA9F6B;
+        }
+        .doc-link svg {
+            width: 0.875rem;
+            height: 0.875rem;
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+            color: #9CA3AF;
+            transition: all 0.2s ease;
+        }
+        .doc-link:hover svg {
+            color: #BA9F6B;
+            transform: translate(1px, -1px);
+        }
+
+        /* Page Transition Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        /* Hide view by default */
+        .page-view {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-brand-cream text-brand-green font-sans relative antialiased selection:bg-brand-gold selection:text-white">
+
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 pointer-events-none z-[-1] bg-pattern"></div>
+
+    <!-- Navigation (Global) -->
+    <nav class="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <a href="#view-home" class="flex items-center gap-4 group">
+            <div class="w-12 h-12 rounded-full bg-brand-green text-white flex items-center justify-center font-serif text-2xl font-bold group-hover:bg-brand-gold transition-colors">
+                A
+            </div>
+            <div>
+                <h1 class="font-serif text-xl font-bold leading-tight tracking-wide">SMA ALBANNA</h1>
+                <p class="text-[9px] tracking-widest text-brand-gold font-semibold uppercase">Religius • Unggul • Berdaya Saing Global</p>
+            </div>
+        </a>
+        <div class="hidden lg:flex items-center gap-8 text-sm font-medium">
+            <a href="#view-dir-a" class="hover:text-brand-gold transition-colors">Kepala Sekolah</a>
+            <a href="#view-dir-b" class="hover:text-brand-gold transition-colors">Waka Kurikulum</a>
+            <a href="#view-dir-c" class="hover:text-brand-gold transition-colors">Waka Kesiswaan</a>
+            <a href="#view-dir-d" class="hover:text-brand-gold transition-colors">Waka Sarana Prasarana</a>
+            <a href="#view-dir-e" class="hover:text-brand-gold transition-colors">Administrasi</a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 pt-6 pb-24 min-h-[70vh]">
+        
+        <!-- ========================================== -->
+        <!-- VIEW 1: HOME PAGE (DASHBOARD)              -->
+        <!-- ========================================== -->
+        <div id="view-home" class="page-view animate-fade-in space-y-16">
+            
+            <!-- Quick Access / Eksternal Link Section -->
+            <section class="space-y-4">
+                <p class="text-brand-gold text-xs font-bold tracking-widest uppercase flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-brand-gold rounded-full"></span> Akses Cepat Eksternal
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    
+                    <!-- 1. Rapor Guru -->
+                    <!-- MASUKKAN LINK RAPOR GURU DI href DI BAWAH INI -->
+                    <a href="#" target="_blank" class="bg-white p-5 rounded-2xl border border-brand-green/10 shadow-sm hover:shadow-md hover:border-brand-gold hover:-translate-y-1 transition-all group flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-brand-gold"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center mb-2 group-hover:bg-brand-gold/10 transition-colors">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5 text-brand-green group-hover:text-brand-gold transition-colors"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-brand-green leading-tight">Rapor Guru</span>
+                    </a>
+
+                    <!-- 2. Rapor WAFA -->
+                    <!-- MASUKKAN LINK RAPOR WAFA DI href DI BAWAH INI -->
+                    <a href="#" target="_blank" class="bg-white p-5 rounded-2xl border border-brand-green/10 shadow-sm hover:shadow-md hover:border-brand-gold hover:-translate-y-1 transition-all group flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-brand-gold"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center mb-2 group-hover:bg-brand-gold/10 transition-colors">
+                            <i data-lucide="book-marked" class="w-5 h-5 text-brand-green group-hover:text-brand-gold transition-colors"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-brand-green leading-tight">Rapor WAFA</span>
+                    </a>
+
+                    <!-- 3. Web Siswa -->
+                    <!-- MASUKKAN LINK WEB SISWA DI href DI BAWAH INI -->
+                    <a href="#" target="_blank" class="bg-white p-5 rounded-2xl border border-brand-green/10 shadow-sm hover:shadow-md hover:border-brand-gold hover:-translate-y-1 transition-all group flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-brand-gold"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center mb-2 group-hover:bg-brand-gold/10 transition-colors">
+                            <i data-lucide="graduation-cap" class="w-5 h-5 text-brand-green group-hover:text-brand-gold transition-colors"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-brand-green leading-tight">Web Siswa</span>
+                    </a>
+
+                    <!-- 4. Absensi Walas dan Guru -->
+                    <!-- MASUKKAN LINK ABSENSI WALAS DAN GURU DI href DI BAWAH INI -->
+                    <a href="#" target="_blank" class="bg-white p-5 rounded-2xl border border-brand-green/10 shadow-sm hover:shadow-md hover:border-brand-gold hover:-translate-y-1 transition-all group flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-brand-gold"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center mb-2 group-hover:bg-brand-gold/10 transition-colors">
+                            <i data-lucide="calendar-check-2" class="w-5 h-5 text-brand-green group-hover:text-brand-gold transition-colors"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-brand-green leading-tight">Absensi Walas & Guru</span>
+                    </a>
+
+                    <!-- 5. Laporan Bulanan Wafa -->
+                    <!-- MASUKKAN LINK LAPORAN BULANAN WAFA DI href DI BAWAH INI -->
+                    <a href="#" target="_blank" class="bg-white p-5 rounded-2xl border border-brand-green/10 shadow-sm hover:shadow-md hover:border-brand-gold hover:-translate-y-1 transition-all group flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-brand-gold"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center mb-2 group-hover:bg-brand-gold/10 transition-colors">
+                            <i data-lucide="file-bar-chart" class="w-5 h-5 text-brand-green group-hover:text-brand-gold transition-colors"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-brand-green leading-tight">Laporan Bulanan WAFA</span>
+                    </a>
+
+                </div>
+            </section>
+            
+            <!-- Hero Section -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8">
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <div class="inline-flex items-center gap-2 border border-brand-gold/40 rounded-full px-4 py-1.5 text-xs font-semibold text-brand-gold uppercase tracking-wider bg-brand-gold/5">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            Portal Resmi Sekolah
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 border border-brand-green/20 rounded-full px-4 py-1.5 text-xs font-medium text-brand-green/80 bg-brand-green/5">
+                            Religius • Unggul • Berdaya Saing Global
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-5xl md:text-7xl font-serif leading-[1.1] text-brand-green">
+                        SMA <span class="text-brand-gold italic">ALBANNA</span><br>
+                        Portal Manajemen<br>
+                        & Dokumentasi.
+                    </h2>
+                    
+                    <p class="text-gray-600 text-lg md:text-xl leading-relaxed max-w-lg">
+                        Satu pintu untuk seluruh dokumen, perencanaan, kurikulum, kesiswaan, sarana prasarana, dan administrasi — terstruktur rapi, mudah ditelusuri.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#bidang" class="bg-brand-green hover:bg-brand-green/90 text-white px-8 py-3.5 rounded-full font-medium transition-all flex items-center gap-2">
+                            Pilih Bidang <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Image -->
+                <div class="relative h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?q=80&w=1200&auto=format&fit=crop" alt="Sekolah Modern" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 glass-overlay"></div>
+                    <div class="absolute bottom-0 left-0 p-10 w-full text-white">
+                        <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-3">Visi Sekolah</p>
+                        <p class="font-serif text-3xl md:text-4xl italic leading-tight text-white/95">
+                            “Membentuk generasi berilmu, berkarakter, dan bermanfaat.”
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-8 py-10 border-t border-brand-green/10">
+                <div>
+                    <h3 class="font-serif text-4xl text-brand-green mb-2">05</h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500 font-semibold">Bidang Utama</p>
+                </div>
+                <div>
+                    <h3 class="font-serif text-4xl text-brand-green mb-2">47+</h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500 font-semibold">Kategori Dokumen</p>
+                </div>
+                <div>
+                    <h3 class="font-serif text-4xl text-brand-green mb-2 flex items-center h-10"><i data-lucide="infinity" class="w-8 h-8"></i></h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500 font-semibold">Update Berkala</p>
+                </div>
+                <div>
+                    <h3 class="font-serif text-4xl text-brand-green mb-2">24/7</h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500 font-semibold">Akses Sistem</p>
+                </div>
+            </section>
+
+            <!-- Bento Grid Section -->
+            <section id="bidang" class="space-y-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-end gap-6">
+                    <div class="max-w-2xl">
+                        <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2">
+                            <span class="w-1 h-1 bg-brand-gold rounded-full"></span> Direktori <span class="w-1 h-1 bg-brand-gold rounded-full"></span>
+                        </p>
+                        <h2 class="font-serif text-4xl md:text-5xl text-brand-green leading-tight">
+                            Pilih bidang untuk masuk ke halamannya.
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1: Kepala Sekolah -->
+                    <a href="#view-dir-a" class="card-hover md:col-span-2 md:row-span-2 bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-brand-green/10 flex flex-col justify-between min-h-[400px] group relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-16">
+                            <div class="bg-brand-cream border border-brand-light-gold rounded-xl px-4 py-2 flex items-center gap-3">
+                                <i data-lucide="crown" class="w-5 h-5 text-brand-green"></i>
+                                <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Bidang A</span>
+                            </div>
+                            <i data-lucide="arrow-right-circle" class="w-6 h-6 text-gray-300 group-hover:text-brand-green transition-colors"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-4xl text-brand-green mb-3">Kepala Sekolah</h3>
+                            <p class="text-gray-600 mb-10">Kepemimpinan, Perencanaan & Supervisi</p>
+                            <div class="border-t border-dashed border-gray-200 pt-6 flex justify-between items-center text-sm font-medium">
+                                <span class="text-gray-400">10 Kategori Utama</span>
+                                <span class="text-brand-green flex items-center gap-1 group-hover:gap-2 transition-all">Buka Halaman <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 2: Waka Kurikulum -->
+                    <a href="#view-dir-b" class="card-hover bg-white rounded-[2rem] p-8 shadow-sm border border-brand-green/10 flex flex-col justify-between group">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="bg-brand-cream border border-brand-light-gold rounded-xl w-12 h-12 flex items-center justify-center">
+                                <i data-lucide="book-open" class="w-5 h-5 text-brand-green"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-brand-gold tracking-widest uppercase mt-3">Bidang B</span>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-2xl text-brand-green mb-2">Waka Kurikulum</h3>
+                            <p class="text-gray-600 text-sm mb-6">Akademik & Pembelajaran</p>
+                            <div class="border-t border-dashed border-gray-200 pt-4 flex justify-between items-center text-xs font-medium">
+                                <span class="text-gray-400">12 Kategori Utama</span>
+                                <span class="text-brand-green flex items-center gap-1 group-hover:gap-2 transition-all">Buka <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 3: Waka Kesiswaan -->
+                    <a href="#view-dir-c" class="card-hover bg-white rounded-[2rem] p-8 shadow-sm border border-brand-green/10 flex flex-col justify-between group">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="bg-brand-cream border border-brand-light-gold rounded-xl w-12 h-12 flex items-center justify-center">
+                                <i data-lucide="users" class="w-5 h-5 text-brand-green"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-brand-gold tracking-widest uppercase mt-3">Bidang C</span>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-2xl text-brand-green mb-2">Waka Kesiswaan</h3>
+                            <p class="text-gray-600 text-sm mb-6">Pembinaan Karakter & Prestasi</p>
+                            <div class="border-t border-dashed border-gray-200 pt-4 flex justify-between items-center text-xs font-medium">
+                                <span class="text-gray-400">11 Kategori Utama</span>
+                                <span class="text-brand-green flex items-center gap-1 group-hover:gap-2 transition-all">Buka <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 4: Waka Sarana Prasarana -->
+                    <a href="#view-dir-d" class="card-hover md:col-span-2 bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-brand-green/10 flex flex-col justify-between group">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="bg-brand-cream border border-brand-light-gold rounded-xl px-4 py-2 flex items-center gap-3">
+                                <i data-lucide="building-2" class="w-5 h-5 text-brand-green"></i>
+                                <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Bidang D</span>
+                            </div>
+                            <i data-lucide="arrow-right-circle" class="w-6 h-6 text-gray-300 group-hover:text-brand-green transition-colors"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-3xl text-brand-green mb-2">Waka Sarana Prasarana</h3>
+                            <p class="text-gray-600 mb-8">Fasilitas, Inventaris & Pemeliharaan</p>
+                            <div class="border-t border-dashed border-gray-200 pt-6 flex justify-between items-center text-sm font-medium">
+                                <span class="text-gray-400">7 Kategori Utama</span>
+                                <span class="text-brand-green flex items-center gap-1 group-hover:gap-2 transition-all">Buka Halaman <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 5: Administrasi -->
+                    <a href="#view-dir-e" class="card-hover bg-white rounded-[2rem] p-8 shadow-sm border border-brand-green/10 flex flex-col justify-between group">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="bg-brand-cream border border-brand-light-gold rounded-xl w-12 h-12 flex items-center justify-center">
+                                <i data-lucide="file-check" class="w-5 h-5 text-brand-green"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-brand-gold tracking-widest uppercase mt-3">Bidang E</span>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-2xl text-brand-green mb-2">Administrasi</h3>
+                            <p class="text-gray-600 text-sm mb-6">Identitas, Persuratan & Data</p>
+                            <div class="border-t border-dashed border-gray-200 pt-4 flex justify-between items-center text-xs font-medium">
+                                <span class="text-gray-400">7 Kategori Utama</span>
+                                <span class="text-brand-green flex items-center gap-1 group-hover:gap-2 transition-all">Buka <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: HALAMAN KEPALA SEKOLAH             -->
+        <!-- ========================================== -->
+        <div id="view-dir-a" class="page-view animate-fade-in max-w-4xl mx-auto">
+            <div class="mb-10">
+                <a href="#view-home" class="inline-flex items-center gap-2 text-gray-500 hover:text-brand-gold transition-colors font-medium text-sm mb-8">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+                </a>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-cream border border-brand-light-gold flex items-center justify-center text-brand-green font-serif font-bold text-3xl shrink-0">A</div>
+                        <div>
+                            <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-1">Direktori Dokumen</p>
+                            <h2 class="font-serif text-4xl text-brand-green">Kepala Sekolah</h2>
+                        </div>
+                    </div>
+                    
+                    <!-- Search untuk Halaman Ini -->
+                    <div class="relative w-full md:w-72">
+                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                         <input type="text" class="search-input block w-full pl-10 pr-4 py-3 bg-white border border-brand-green/20 rounded-xl text-sm focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none shadow-sm" placeholder="Cari di Kepala Sekolah...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-brand-green/10 shadow-sm directory-list">
+                <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base">
+                    <!-- MASUKKAN LINK STRUKTUR ORGANISASI SEKOLAH DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>STRUKTUR ORGANISASI SEKOLAH</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK RENCANA KERJA TAHUNAN (RKT) DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>RENCANA KERJA TAHUNAN (RKT)</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK RENCANA KERJA DAN ANGGARAN SEKOLAH (RKAS) DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>RENCANA KERJA DAN ANGGARAN SEKOLAH (RKAS)</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK KALENDER AKADEMIK DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>KALENDER AKADEMIK</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK SUPERVISI AKADEMIS DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>SUPERVISI AKADEMIS</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK LAPORAN SUPERVISI AKADEMIK DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>LAPORAN SUPERVISI AKADEMIK</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK COACHING GURU DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>COACHING GURU</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK JOBDES DAN KALENDER KERJA JABATAN STRUKTURAL DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>JOBDES DAN KALENDER KERJA JABATAN STRUKTURAL</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK SUSUNAN KEPANITIAAN DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>SUSUNAN KEPANITIAAN</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <li>
+                        <!-- MASUKKAN LINK LAPORAN KEGIATAN DI SINI -->
+                        <a href="#" class="doc-link" target="_blank"><span>LAPORAN KEGIATAN</span> <i data-lucide="external-link"></i></a>
+                        <div class="text-gray-500 italic mt-1 ml-1 text-sm">(laporan sederhana, latar belakang, pelaksanaan kegiatan, dokumentasi, evaluasi)</div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: HALAMAN WAKA KURIKULUM             -->
+        <!-- ========================================== -->
+        <div id="view-dir-b" class="page-view animate-fade-in max-w-5xl mx-auto">
+            <div class="mb-10">
+                <a href="#view-home" class="inline-flex items-center gap-2 text-gray-500 hover:text-brand-gold transition-colors font-medium text-sm mb-8">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+                </a>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-cream border border-brand-light-gold flex items-center justify-center text-brand-green font-serif font-bold text-3xl shrink-0">B</div>
+                        <div>
+                            <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-1">Direktori Dokumen</p>
+                            <h2 class="font-serif text-4xl text-brand-green">Waka Kurikulum</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full md:w-72">
+                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                         <input type="text" class="search-input block w-full pl-10 pr-4 py-3 bg-white border border-brand-green/20 rounded-xl text-sm focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none shadow-sm" placeholder="Cari di Kurikulum...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-brand-green/10 shadow-sm directory-list">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    <div>
+                        <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base">
+                            <!-- MASUKKAN LINK PERATURAN AKADEMIK DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>PERATURAN AKADEMIK</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK BEBAN MENGAJAR DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>BEBAN MENGAJAR</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK JADWAL PELAJARAN DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>JADWAL PELAJARAN</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK KURIKULUM SATUAN PENDIDIKAN DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>KURIKULUM SATUAN PENDIDIKAN</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <li>
+                                <!-- MASUKKAN LINK KUMPULAN PERANGKAT PEMBELAJARAN (UTAMA) DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>PERANGKAT PEMBELAJARAN:</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-4 text-gray-600">
+                                    <li>
+                                        <!-- MASUKKAN LINK MAPEL ... DI SINI -->
+                                        <a href="#" class="doc-link" target="_blank"><span>Mata pelajaran : ….</span> <i data-lucide="external-link"></i></a>
+                                        <ol class="list-decimal mt-2 space-y-2 text-gray-500">
+                                            <!-- MASUKKAN LINK ALOKASI WAKTU KELAS X DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Alokasi waktu kelas X</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK ALOKASI WAKTU KELAS XI DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Alokasi waktu kelas XI</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK ALOKASI WAKTU KELAS XII DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Alokasi waktu kelas XII</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK CAPAIAN PEMBELAJARAN (CP) DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Capaian Pembelajaran (CP)</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK ALUR TUJUAN PEMBELAJARAN (ATP) DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Alur Tujuan Pembelajaran (ATP)</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK PROGRAM TAHUNAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Program tahunan</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK PROGRAM SEMESTER GANJIL DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Program Semester Ganjil</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK PROGRAM SEMESTER GENAP DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Program Semester genap</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK KKTP DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Kriteria Ketuntasan Tujuan Pembelajaran (KKTP)</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK ASESMEN AWAL DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Asesmen awal</span> <i data-lucide="external-link"></i></a></li>
+                                        </ol>
+                                    </li>
+                                    <!-- MASUKKAN LINK MAPEL LAINNYA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Mata pelajaran : …</span> <i data-lucide="external-link"></i></a></li>
+                                    <li><a href="#" class="doc-link" target="_blank"><span>…</span> <i data-lucide="external-link"></i></a></li>
+                                    <li><a href="#" class="doc-link" target="_blank"><span>…</span> <i data-lucide="external-link"></i></a></li>
+                                    <li>
+                                        <!-- MASUKKAN LINK MAPEL AL-QURAN DI SINI -->
+                                        <a href="#" class="doc-link" target="_blank"><span>Mata pelajaran AlQur’an</span> <i data-lucide="external-link"></i></a>
+                                        <ol class="list-decimal mt-2 space-y-2 text-gray-500">
+                                            <!-- MASUKKAN LINK ALOKASI WAKTU AL-QURAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Alokasi waktu</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK PERANGKAT PEMBELAJARAN AL-QURAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Perangkat pembelajaran</span> <i data-lucide="external-link"></i></a></li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                            <!-- MASUKKAN LINK JURNAL PEMBELAJARAN DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>JURNAL PEMBELAJARAN</span> <i data-lucide="external-link"></i></a></li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base" start="7">
+                            <!-- MASUKKAN LINK LEMBAR PENILAIAN DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>LEMBAR PENILAIAN</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <li>
+                                <!-- MASUKKAN LINK PROGRAM UTAMA PEMBELAJARAN AL QUR'AN DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>PEMBELAJARAN AL QUR’AN</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK PERANGKAT PEMBELAJARAN AL QUR'AN DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Perangkat pembelajaran</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK PELAKSANAAN PEMBINAAN RUTIN DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Pelaksanaan pembinaan rutin (pelaksanaan, dokumentasi, hasil)</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK SUPERVISI PEMBELAJARAN DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Supervisi pembelajaran</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK CAPAIAN SISWA PER JENJANG PER BULAN DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Capaian siswa per jenjang per bulan</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK CAPAIAN GURU DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Capaian guru</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA PROGRAM STUDI LANJUT DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>STUDI LANJUT</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK PROGRAM STUDI LANJUT DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Program studi lanjut</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK HASIL TRY OUT DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Hasil try out (UTBK, TKA, USP)</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK HASIL TES MINAT BAKAT DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Hasil tes minat bakat</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA LAB IPA & KOMPUTER DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>LABORATORIUM IPA DAN KOMPUTER</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK INVENTARISASI RUANG LAB DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Inventarisasi ruang</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK JADWAL PENGGUNAAN RUANG LAB DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Jadwal penggunaan ruang</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK MANUAL PRAKTIKUM DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Panduan/penuntun (manual) praktikum</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK TATA TERTIB LAB DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Tata tertib</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA PROGRAM LITERASI DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>PROGRAM LITERASI</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK PROGRAM LITERASI DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Program literasi</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK LAPORAN LITERASI PER KELAS DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Laporan literasi per kelas</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK LITERASI GURU DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Literasi guru</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA PERPUSTAKAAN DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>PERPUSTAKAAN</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK PROGRAM PERPUSTAKAAN DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Program perpustakaan</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK JADWAL PENGGUNAAN PERPUSTAKAAN DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Jadwal penggunaan perpustakaan</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: HALAMAN WAKA KESISWAAN             -->
+        <!-- ========================================== -->
+        <div id="view-dir-c" class="page-view animate-fade-in max-w-5xl mx-auto">
+            <div class="mb-10">
+                <a href="#view-home" class="inline-flex items-center gap-2 text-gray-500 hover:text-brand-gold transition-colors font-medium text-sm mb-8">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+                </a>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-cream border border-brand-light-gold flex items-center justify-center text-brand-green font-serif font-bold text-3xl shrink-0">C</div>
+                        <div>
+                            <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-1">Direktori Dokumen</p>
+                            <h2 class="font-serif text-4xl text-brand-green">Waka Kesiswaan</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full md:w-72">
+                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                         <input type="text" class="search-input block w-full pl-10 pr-4 py-3 bg-white border border-brand-green/20 rounded-xl text-sm focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none shadow-sm" placeholder="Cari di Kesiswaan...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-brand-green/10 shadow-sm directory-list">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    <div>
+                        <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base">
+                            <!-- MASUKKAN LINK BUKU PROFIL DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Buku profil</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK TATA TERTIB SISWA DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Tata tertib siswa</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK PROGRAM PEMBIASAAN DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Program pembiasaan</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK JADWAL PENYAMBUTAN PAGI DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Jadwal penyambutan pagi</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK KEIKUTSERTAAN LOMBA DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Keikutsertaan lomba</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK PRESTASI SISWA DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Prestasi siswa</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK SEBARAN ALUMNI DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Sebaran alumni</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA EKSTRAKURIKULER DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>Ekstrakurikuler</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK JENIS EKSTRA & JADWAL DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Jenis ekstrakurikuler dan jadwal pelaksanaan ekstra</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK DAFTAR SISWA PER EKSTRA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Daftar siswa per ekstra</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK DATA GURU PENGAJAR EKSTRA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Data guru pengajar ekstrakurikuler</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK JURNAL PEMBELAJARAN EKSTRA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Jurnal pembelajaran ekstrakurikuler</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK DAFTAR NILAI EKSTRA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Daftar nilai</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA KEWALASAN DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>Kewalasan</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK PROGRAM KELAS DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Program kelas (masing-masing kelas)</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK STRUKTUR KELAS DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Struktur kelas</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK PROFILING SISWA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Profiling siswa</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK REKAP IBADAH SISWA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Rekap ibadah siswa</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base" start="10">
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA BIMBINGAN DAN KONSELING DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>Bimbingan dan konseling</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                    <!-- MASUKKAN LINK PROGRAM BK DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Program BK</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK PELANGGARAN SISWA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Pelanggaran siswa</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK REKAP PRESTASI SISWA DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Rekap prestasi siswa</span> <i data-lucide="external-link"></i></a></li>
+                                    
+                                    <!-- MASUKKAN LINK JADWAL BIMBINGAN BK DI SINI -->
+                                    <li><a href="#" class="doc-link" target="_blank"><span>Jadwal bimbingan dan konseling klasikal dan individual</span> <i data-lucide="external-link"></i></a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <!-- MASUKKAN LINK UTAMA ORGANISASI SISWA DI SINI -->
+                                <a href="#" class="doc-link" target="_blank"><span>Organisasi siswa</span> <i data-lucide="external-link"></i></a>
+                                <ol class="list-[lower-alpha] mt-3 space-y-5 text-gray-600">
+                                    <li>
+                                        <!-- MASUKKAN LINK UTAMA OSIS DI SINI -->
+                                        <a href="#" class="doc-link font-medium text-brand-green" target="_blank"><span>OSIS</span> <i data-lucide="external-link"></i></a>
+                                        <ol class="list-decimal mt-2 space-y-2 text-gray-500 font-normal">
+                                            <!-- MASUKKAN LINK PROGRAM OSIS DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Program OSIS</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK DATA PENGURUS OSIS DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Data pengurus organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK SUSUNAN ORGANISASI OSIS DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Susunan organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK INVENTARIS OSIS DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Inventaris organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <!-- MASUKKAN LINK UTAMA JRA DI SINI -->
+                                        <a href="#" class="doc-link font-medium text-brand-green" target="_blank"><span>JRA</span> <i data-lucide="external-link"></i></a>
+                                        <ol class="list-decimal mt-2 space-y-2 text-gray-500 font-normal">
+                                            <!-- MASUKKAN LINK PROGRAM JRA DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Program JRA</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK DATA PENGURUS JRA DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Data pengurus organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK SUSUNAN ORGANISASI JRA DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Susunan organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK INVENTARIS JRA DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Inventaris organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <!-- MASUKKAN LINK UTAMA AMBALAN DI SINI -->
+                                        <a href="#" class="doc-link font-medium text-brand-green" target="_blank"><span>Ambalan</span> <i data-lucide="external-link"></i></a>
+                                        <ol class="list-decimal mt-2 space-y-2 text-gray-500 font-normal">
+                                            <!-- MASUKKAN LINK PROGRAM AMBALAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Program Ambalan</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK DATA PENGURUS AMBALAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Data pengurus organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK SUSUNAN ORGANISASI AMBALAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Susunan organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                            
+                                            <!-- MASUKKAN LINK INVENTARIS AMBALAN DI SINI -->
+                                            <li><a href="#" class="doc-link" target="_blank"><span>Inventaris organisasi</span> <i data-lucide="external-link"></i></a></li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: HALAMAN WAKA SARANA PRASARANA      -->
+        <!-- ========================================== -->
+        <div id="view-dir-d" class="page-view animate-fade-in max-w-4xl mx-auto">
+            <div class="mb-10">
+                <a href="#view-home" class="inline-flex items-center gap-2 text-gray-500 hover:text-brand-gold transition-colors font-medium text-sm mb-8">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+                </a>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-cream border border-brand-light-gold flex items-center justify-center text-brand-green font-serif font-bold text-3xl shrink-0">D</div>
+                        <div>
+                            <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-1">Direktori Dokumen</p>
+                            <h2 class="font-serif text-4xl text-brand-green">Waka Sarana Prasarana</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full md:w-72">
+                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                         <input type="text" class="search-input block w-full pl-10 pr-4 py-3 bg-white border border-brand-green/20 rounded-xl text-sm focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none shadow-sm" placeholder="Cari di Sarana Prasarana...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-brand-green/10 shadow-sm directory-list">
+                <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base">
+                    <!-- MASUKKAN LINK FORM PEMANFAATAN RUANGAN DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>Form pemanfaatan ruangan</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK FORM PEMINJAMAN DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>Form peminjaman</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK FORM PENGECEKAN KEBERSIHAN DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>Form pengecekan kebersihan</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK FORM PERBAIKAN DAN MAINTENANCE DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>Form perbaikan dan maintenance</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK DENAH RUANGAN PER LANTAI DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>Denah ruangan per lantai</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <!-- MASUKKAN LINK DAFTAR INVENTARIS RUANG DI SINI -->
+                    <li><a href="#" class="doc-link" target="_blank"><span>Daftar inventaris ruang</span> <i data-lucide="external-link"></i></a></li>
+                    
+                    <li>
+                        <!-- MASUKKAN LINK UTAMA DOKUMENTASI DI SINI -->
+                        <a href="#" class="doc-link" target="_blank"><span>Dokumentasi :</span> <i data-lucide="external-link"></i></a>
+                        <ol class="list-[lower-alpha] mt-3 space-y-3 text-gray-600">
+                            <!-- MASUKKAN LINK DOKUMENTASI PEMANFAATAN RUANGAN DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Pemanfaatan ruangan</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK DOKUMENTASI PEMELIHARAAN INVENTARIS DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Pemeliharaan inventaris</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK DOKUMENTASI PERAWATAN SARPRAS DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Perawatan sarana prasarana</span> <i data-lucide="external-link"></i></a></li>
+                            
+                            <!-- MASUKKAN LINK DOKUMENTASI PERBAIKAN SARPRAS DI SINI -->
+                            <li><a href="#" class="doc-link" target="_blank"><span>Perbaikan sarana prasarana</span> <i data-lucide="external-link"></i></a></li>
+                        </ol>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 6: HALAMAN ADMINISTRASI               -->
+        <!-- ========================================== -->
+        <div id="view-dir-e" class="page-view animate-fade-in max-w-4xl mx-auto">
+            <div class="mb-10">
+                <a href="#view-home" class="inline-flex items-center gap-2 text-gray-500 hover:text-brand-gold transition-colors font-medium text-sm mb-8">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+                </a>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-cream border border-brand-light-gold flex items-center justify-center text-brand-green font-serif font-bold text-3xl shrink-0">E</div>
+                        <div>
+                            <p class="text-brand-gold text-xs font-bold tracking-widest uppercase mb-1">Direktori Dokumen</p>
+                            <h2 class="font-serif text-4xl text-brand-green">Administrasi</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full md:w-72">
+                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                         <input type="text" class="search-input block w-full pl-10 pr-4 py-3 bg-white border border-brand-green/20 rounded-xl text-sm focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none shadow-sm" placeholder="Cari di Administrasi...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-brand-green/10 shadow-sm directory-list">
+                <div class="columns-1 md:columns-2 gap-12">
+                    <ol class="list-decimal space-y-4 text-gray-700 text-sm md:text-base">
+                        <!-- MASUKKAN LINK LOGO SEKOLAH DI SINI -->
+                        <li><a href="#" class="doc-link" target="_blank"><span>Logo sekolah</span> <i data-lucide="external-link"></i></a></li>
+                        
+                        <!-- MASUKKAN LINK KOP SURAT SEKOLAH DI SINI -->
+                        <li><a href="#" class="doc-link" target="_blank"><span>Kop surat sekolah (sekolah, komite, organisasi)</span> <i data-lucide="external-link"></i></a></li>
+                        
+                        <!-- MASUKKAN LINK NOMENKLATUR PENOMORAN SURAT DI SINI -->
+                        <li><a href="#" class="doc-link" target="_blank"><span>Nomenklatur penomoran surat</span> <i data-lucide="external-link"></i></a></li>
+                        
+                        <!-- MASUKKAN LINK DATA PEGAWAI DI SINI -->
+                        <li><a href="#" class="doc-link" target="_blank"><span>Data pegawai</span> <i data-lucide="external-link"></i></a></li>
+                        
+                        <!-- MASUKKAN LINK DATA SISWA PER KELAS DI SINI -->
+                        <li><a href="#" class="doc-link" target="_blank"><span>Data siswa per kelas</span> <i data-lucide="external-link"></i></a></li>
+                        
+                        <li>
+                            <!-- MASUKKAN LINK UTAMA ALUR PENERIMAAN SISWA DI SINI -->
+                            <a href="#" class="doc-link" target="_blank"><span>Alur penerimaan siswa</span> <i data-lucide="external-link"></i></a>
+                            <ol class="list-[lower-alpha] mt-3 space-y-2 text-gray-600">
+                                <!-- MASUKKAN LINK ALUR PENERIMAAN SISWA BARU DI SINI -->
+                                <li><a href="#" class="doc-link" target="_blank"><span>Siswa baru</span> <i data-lucide="external-link"></i></a></li>
+                                
+                                <!-- MASUKKAN LINK ALUR MUTASI SISWA DI SINI -->
+                                <li><a href="#" class="doc-link" target="_blank"><span>Siswa mutasi</span> <i data-lucide="external-link"></i></a></li>
+                            </ol>
+                        </li>
+                        <!-- MASUKKAN LINK PEMBAGIAN AMANAH KERJA TU DI SINI -->
+                        <li><a href="#" class="doc-link" target="_blank"><span>Pembagian amanah kerja TU</span> <i data-lucide="external-link"></i></a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-green text-white pt-20 pb-8 px-6 mt-20">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+            
+            <!-- Logo & Desc -->
+            <div class="md:col-span-5 space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full bg-white text-brand-green flex items-center justify-center font-serif text-3xl font-bold">
+                        A
+                    </div>
+                    <div>
+                        <h2 class="font-serif text-2xl font-bold tracking-wide">SMA ALBANNA</h2>
+                        <p class="text-brand-gold text-xs font-bold tracking-widest uppercase">Sekolah Menengah Atas</p>
+                    </div>
+                </div>
+                <p class="text-brand-cream/70 text-sm leading-relaxed max-w-sm">
+                    Portal manajemen sekolah yang menyatukan dokumen, perencanaan, dan dokumentasi seluruh bidang — dari Kepala Sekolah, Wakil Kepala hingga Administrasi.
+                </p>
+            </div>
+
+            <!-- Links -->
+            <div class="md:col-span-3 space-y-6">
+                <h4 class="text-brand-gold text-xs font-bold tracking-widest uppercase">Bidang</h4>
+                <ul class="space-y-4 text-sm text-brand-cream/80">
+                    <li><a href="#view-dir-a" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-brand-gold font-bold text-[10px]">A.</span> Kepala Sekolah</a></li>
+                    <li><a href="#view-dir-b" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-brand-gold font-bold text-[10px]">B.</span> Waka Kurikulum</a></li>
+                    <li><a href="#view-dir-c" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-brand-gold font-bold text-[10px]">C.</span> Waka Kesiswaan</a></li>
+                    <li><a href="#view-dir-d" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-brand-gold font-bold text-[10px]">D.</span> Waka Sarana Prasarana</a></li>
+                    <li><a href="#view-dir-e" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-brand-gold font-bold text-[10px]">E.</span> Administrasi</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="md:col-span-4 space-y-6">
+                <h4 class="text-brand-gold text-xs font-bold tracking-widest uppercase">Kontak</h4>
+                <ul class="space-y-4 text-sm text-brand-cream/80">
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                        <span>Jl. Tukad Badung XII B, No 19, Denpasar , Bali</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="phone" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                        <span>Hub Admin</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="mail" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                        <span>info@sma-albanna.sch.id</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="max-w-7xl mx-auto border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-cream/60">
+            <p>&copy; 2026 SMA ALBANNA • Seluruh dokumen dipublikasikan untuk kepentingan internal sekolah.</p>
+            <p class="font-serif italic text-brand-gold text-sm text-center md:text-right">"Religius, Unggul, Berdaya Saing Global"</p>
+        </div>
+    </footer>
+
+    <!-- Initialize Icons & Scripts -->
+    <script>
+        lucide.createIcons();
+
+        // Single Page Application (SPA) Routing System
+        function handleRouting() {
+            // Dapatkan tujuan dari hash URL (contoh: #view-dir-a), default ke home
+            const hash = window.location.hash || '#view-home';
+            const targetElement = document.querySelector(hash);
+            
+            if (targetElement && targetElement.classList.contains('page-view')) {
+                // Jika tujuan adalah halaman utuh (punya class page-view)
+                document.querySelectorAll('.page-view').forEach(view => {
+                    view.style.display = 'none';
+                });
+                
+                targetElement.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (targetElement) {
+                // Jika tujuan adalah elemen di dalam halaman beranda (seperti #bidang)
+                document.querySelectorAll('.page-view').forEach(view => {
+                    view.style.display = 'none';
+                });
+                document.getElementById('view-home').style.display = 'block';
+                
+                // Gulir perlahan ke elemen tersebut
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                // Jika hash tidak dikenali, kembali ke home
+                document.querySelectorAll('.page-view').forEach(view => {
+                    view.style.display = 'none';
+                });
+                document.getElementById('view-home').style.display = 'block';
+            }
+        }
+
+        // Dengarkan perubahan URL/Klik Tautan
+        window.addEventListener('hashchange', handleRouting);
+        // Jalankan saat halaman pertama kali dimuat
+        document.addEventListener('DOMContentLoaded', handleRouting);
+
+        // Search Functionality untuk masing-masing halaman
+        document.querySelectorAll('.search-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                
+                // Cari area list terdekat dalam halaman yang sama
+                const container = input.closest('.page-view').querySelector('.directory-list');
+                const links = container.querySelectorAll('.doc-link');
+                const listItems = container.querySelectorAll('li');
+
+                // Jika kosong, tampilkan semua
+                if (term === '') {
+                    listItems.forEach(li => li.style.display = '');
+                    return;
+                }
+
+                // Sembunyikan semua item
+                listItems.forEach(li => li.style.display = 'none');
+
+                // Tampilkan yang cocok
+                links.forEach(link => {
+                    if (link.textContent.toLowerCase().includes(term)) {
+                        let currentEl = link.closest('li');
+                        // Tampilkan parent (induk) list agar struktur (seperti a, b, c) tetap terlihat
+                        while (currentEl && currentEl !== container) {
+                            if (currentEl.tagName === 'LI' || currentEl.tagName === 'OL') {
+                                currentEl.style.display = '';
+                            }
+                            currentEl = currentEl.parentElement;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
